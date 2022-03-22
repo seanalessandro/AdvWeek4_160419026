@@ -7,6 +7,7 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import id.ac.ubaya.advweek4.R
 import id.ac.ubaya.advweek4.model.Student
+import id.ac.ubaya.advweek4.util.loadImage
 import kotlinx.android.synthetic.main.student_list_item.view.*
 
 class StudentListAdapter (val studentList:ArrayList<Student>):RecyclerView.Adapter<StudentListAdapter.StudentViewHolder>()
@@ -21,28 +22,29 @@ class StudentListAdapter (val studentList:ArrayList<Student>):RecyclerView.Adapt
     }
 
     override fun onBindViewHolder(holder: StudentViewHolder, position: Int) {
-//        val student = studentList[position]
-//        with (holder.view){
-//            textIDListItem.text = student.id
-//            textNameListItem.text = student.name
-//            btnDetail.setOnClickListener{
-//                val action = StudentListFragmentDirections.actionStudentDetail()
-//                Navigation.findNavController(it).navigate(action)
-//            }
-//        }
-        holder.view.textIDListItem.text = studentList[position].id
-        holder.view.textNameListItem.text = studentList[position].name
-        holder.view.btnDetail.setOnClickListener{
-            val action = StudentListFragmentDirections.actionStudentDetail()
-            Navigation.findNavController(it).navigate(action)
+        val student = studentList[position]
+        with (holder.view){
+            textIDListItem.text = student.id
+            textNameListItem.text = student.name
+            btnDetail.setOnClickListener{
+                val action = StudentListFragmentDirections.actionStudentDetail(student.id.toString())
+                Navigation.findNavController(it).navigate(action)
+            }
+            imageStudentPhoto.loadImage(student.photoUrl, progressLoadingStudentPhoto)
         }
+//        holder.view.textIDListItem.text = studentList[position].id
+//        holder.view.textNameListItem.text = studentList[position].name
+//        holder.view.btnDetail.setOnClickListener{
+//            val action = StudentListFragmentDirections.actionStudentDetail()
+//            Navigation.findNavController(it).navigate(action)
+//        }
     }
 
     override fun getItemCount(): Int {
         return studentList.size
     }
 
-    fun updateStudentList(newStudentList: List<Student>){
+    fun updateStudentList(newStudentList: ArrayList<Student>){
         studentList.clear()
         studentList.addAll(newStudentList)
         notifyDataSetChanged()

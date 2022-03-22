@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import id.ac.ubaya.advweek4.R
+import id.ac.ubaya.advweek4.model.Student
 import id.ac.ubaya.advweek4.viewmodel.ListViewModel
 import kotlinx.android.synthetic.main.fragment_student_list.*
 
@@ -34,22 +35,32 @@ class StudentListFragment : Fragment() {
         recView.adapter = studentListAdapter
 
         observeViewModel()
+
+        refreshLayout.setOnRefreshListener {
+            recView.visibility = View.GONE
+            txtError.visibility = View.GONE
+            progressLoad.visibility = View.VISIBLE
+            viewModel.refresh()
+            refreshLayout.isRefreshing = false
+        }
     }
 
-    fun observeViewModel(){
-        viewModel.studentsLD.observe(viewLifecycleOwner, Observer {
+    private fun observeViewModel(){
+        viewModel.studentsLD.observe(viewLifecycleOwner ){
             studentListAdapter.updateStudentList(it)
-        })
+        }
 
-        viewModel.studentLoadErrorLD.observe(viewLifecycleOwner, Observer {
+        viewModel.studentLoadErrorLD.observe(viewLifecycleOwner)
+        {
             if(it == true){
                 txtError.visibility = View.VISIBLE
             } else {
                 txtError.visibility = View.GONE
             }
-        })
+        }
 
-        viewModel.loadingLD.observe(viewLifecycleOwner, Observer {
+        viewModel.loadingLD.observe(viewLifecycleOwner)
+        {
             if(it == true){
                 recView.visibility = View.GONE
                 progressLoad.visibility = View.VISIBLE
@@ -58,6 +69,6 @@ class StudentListFragment : Fragment() {
                 recView.visibility = View.VISIBLE
                 progressLoad.visibility = View.GONE
             }
-        })
+        }
     }
 }
