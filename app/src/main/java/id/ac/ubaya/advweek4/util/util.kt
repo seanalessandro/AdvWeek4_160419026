@@ -3,9 +3,15 @@ package id.ac.ubaya.advweek4.util
 import android.view.View
 import android.widget.ImageView
 import android.widget.ProgressBar
+import androidx.databinding.BindingAdapter
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import id.ac.ubaya.advweek4.R
+
+@BindingAdapter("android:imageUrl", "android:progressBar")
+fun loadPhotoURL(view:ImageView, url:String, pb:ProgressBar){
+    view.loadImage(url,pb)
+}
 
 fun ImageView.loadImage(url: String?, progressBar: ProgressBar){
     Picasso.get()
@@ -22,3 +28,4 @@ fun ImageView.loadImage(url: String?, progressBar: ProgressBar){
             }
         })
 }
+
